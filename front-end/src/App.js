@@ -3,7 +3,7 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
-//import Col from 'react-bootstrap/Col';
+import Col from 'react-bootstrap/Col';
 import Tabs from 'react-bootstrap/Tabs'
 import Tab from 'react-bootstrap/Tab'
 //import TabPane from 'react-bootstrap/TabPane'
@@ -27,11 +27,7 @@ export class MapContainer extends Component {
       />
    
       <header className="App-header">
-
-      </header>
-
-      <section className="App-section">
-      <Container>
+        <Container fluid>
         <Row>
           <Tabs defaultActiveKey="dashboard" className="tabsetting">
             <Tab eventKey="dashboard" title="Dashboard"></Tab>
@@ -39,22 +35,29 @@ export class MapContainer extends Component {
             <Tab eventKey="trip" title="ทริปยอดนิยม"></Tab>
           </Tabs>
         </Row>
-        
-        <Row>
-        <Map
-        google={this.props.google}
-        zoom={14}
-        style={mapStyles}
-        initialCenter={
-          {
-            lat:  13.736717,
-            lng:  100.523186
-          }
-        }
-      />
-      </Row>
+        </Container>
+      </header>
 
+      <section className="App-section">
+      <Container fluid>
+        <Row style={{marginLeft:40,marginTop:40}}>
+          <Map
+          google={this.props.google}
+          zoom={14}
+          style={mapStyles}
+          initialCenter={
+            {
+              lat:  13.736717,
+              lng:  100.523186
+            }
+          }
+          />
+        </Row>
+      
       </Container>
+    
+  
+     
       </section>
     </div>
 
@@ -67,6 +70,7 @@ export default GoogleApiWrapper({
 })(MapContainer);
 
 
+/*
 function App() {
   
   return (
@@ -90,12 +94,15 @@ function App() {
             <Tab eventKey="poi" title="สถานที่ท่องเที่ยวยอดนิยม"></Tab>
             <Tab eventKey="trip" title="ทริปยอดนิยม"></Tab>
           </Tabs>
+
         </Row>
-        <MapContainer></MapContainer>
+        <Row></Row>
+
       </Container>
       </section>
+
     </div>
   );
 }
 
-//export default App;
+export default App; */
