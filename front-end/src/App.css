@@ -1,6 +1,8 @@
 .App {
-  text-align: center;
+  text-align: left;
 }
+
+
 /*
 .App-logo {
   height: 40vmin;
@@ -14,7 +16,7 @@
 }*/
 
 .App-header {
-  background-color: #282c34;
+  background-color: #C4F1BE;
   min-height: 30px;
   display: flex;
   flex-direction: column;
@@ -27,16 +29,31 @@
 
 
 .App-section {
-  background-color: #ffffff;
+  background-color: #C4F1BE;
+  background-size: cover;
   display: flex;
   align-items: left;
   font-family: monospace;
   font-size: 18px;
-
+  min-height: 100vh;
+  max-height: 100%;
 }
+
 
 .App-link {
   color: #61dafb;
+}
+
+.color-nav{
+  background-color: #201E50;
+}
+
+.nav-text{
+  color: #A2C3A4;
+}
+
+.nav-brand{
+  color: #C4F1BE;
 }
 
 /*
