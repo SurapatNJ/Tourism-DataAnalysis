@@ -43,7 +43,7 @@ const PlaceName = () => {
         id="placeName"
         labelKey="pname"
         options={options}
-        placeholder="เธเธทเนเธญเธชเธ–เธฒเธเธ—เธตเน"
+        placeholder="ชื่อสถานที่"
         ref={ref}
         style={{width:500}}
       />
@@ -207,12 +207,12 @@ export class MapContainer extends Component {
             <Jumbotron style={{backgroundSize:'cover' , backgroundColor:'#525B76', marginTop:20, marginLeft:150 , width:450}}>
                 <CardDeck style={{ width: '450px',marginLeft:-32}}> 
                   <Card border="primary">
-                    <Card.Header style={{textAlign:"center",fontSize:20}}>เธฃเธฒเธขเธฅเธฐเน€เธญเธตเธขเธ”เธชเธ–เธฒเธเธ—เธตเนเธ—เนเธญเธเน€เธ—เธตเนเธขเธง</Card.Header>
+                    <Card.Header style={{textAlign:"center",fontSize:20}}>รายละเอียดสถานที่ท่องเที่ยว</Card.Header>
                     <Card.Body>
                       <ListGroup variant="flush">
-                        <ListGroup.Item>เธเธทเนเธญเธชเธ–เธฒเธเธ—เธตเน: </ListGroup.Item>
-                        <ListGroup.Item>เธฅเธฐเธ•เธดเธเธนเธ”-เธฅเธญเธเธเธดเธเธนเธ”: </ListGroup.Item>
-                        <ListGroup.Item>เธเนเธฒเธเธงเธฒเธกเธเธดเธขเธก: <ProgressBar variant="warning"animated now={45}/></ListGroup.Item>
+                        <ListGroup.Item>ชื่อสถานที่: </ListGroup.Item>
+                        <ListGroup.Item>ละติจูด-ลองจิจูด: </ListGroup.Item>
+                        <ListGroup.Item>ค่าความนิยม: <ProgressBar variant="warning"animated now={45}/></ListGroup.Item>
                       </ListGroup>
                     </Card.Body>
                     <Card.Footer>
