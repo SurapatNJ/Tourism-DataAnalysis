@@ -1,3 +1,5 @@
+
+
 .App {
   text-align: left;
 }
@@ -29,11 +31,12 @@
 
 
 .App-section {
+  background:linear-gradient(transparent,rgba(32,30,80,0.5));
   background-color: #C4F1BE;
   background-size: cover;
   display: flex;
   align-items: left;
-  font-family: monospace;
+  font-family: csPrajad;
   font-size: 18px;
   min-height: 100vh;
   max-height: 100%;
@@ -46,11 +49,17 @@
 
 .color-nav{
   background-color: #201E50;
+  font-family: csPrajad;
 }
 
 .nav-text{
   color: #A2C3A4;
+  margin-left: 15px;
 }
+.nav-text:hover{
+  color: #869D96;
+}
+
 
 .nav-brand{
   color: #C4F1BE;
