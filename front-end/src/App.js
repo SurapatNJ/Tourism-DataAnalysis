@@ -1,4 +1,4 @@
-import React , {Component} from 'react';
+/*import React , {Component} from 'react';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Container from 'react-bootstrap/Container';
@@ -35,8 +35,8 @@ function App() {
           <Navigation />
             <Switch>
              <Route path="/" component={Home} exact/>
-             <Route path="/pages/Poi" component={Poi}/>
-             <Route path="/pages/Trip" component={Trip}/>
+             <Route path="/pages/Poi" component={Poi} exact/>
+             <Route path="/pages/Trip" component={Trip} exact/>
            </Switch>
     </div>
     </BrowserRouter>
@@ -67,8 +67,8 @@ function App() {
         <Row>
           <Tabs defaultActiveKey="dashboard" className="tabsetting">
             <Tab eventKey="dashboard" title="Dashboard"></Tab>
-            <Tab eventKey="poi" title="เธชเธ–เธฒเธเธ—เธตเนเธ—เนเธญเธเน€เธ—เธตเนเธขเธงเธขเธญเธ”เธเธดเธขเธก"></Tab>
-            <Tab eventKey="trip" title="เธ—เธฃเธดเธเธขเธญเธ”เธเธดเธขเธก"></Tab>
+            <Tab eventKey="poi" title="สถานที่ท่องเที่ยวยอดนิยม"></Tab>
+            <Tab eventKey="trip" title="ทริปยอดนิยม"></Tab>
           </Tabs>
 
         </Row>
@@ -106,3 +106,123 @@ class App extends Component {
  
 export default App;
 */
+
+
+import React from "react";
+import './App.css';
+import { Tabs, Tab, AppBar, Toolbar,Typography ,IconButton} from "@material-ui/core";
+import { Route, BrowserRouter, Switch, Link } from "react-router-dom";
+import Poi from "./pages/Poi";
+import Trip from "./pages/Trip";
+import Home from './pages/Home';
+import { makeStyles } from '@material-ui/core/styles';
+import "bootstrap/dist/css/bootstrap.min.css";
+import logo from './location.svg';
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+  },
+  menuButton: {
+    marginRight: theme.spacing(2),
+    color:"#FFFFFF",
+    "&:hover": {
+      backgroundColor: "transparent",
+      color:"#3C6E71",
+      textDecoration: "underline transparent"
+    }
+  },
+  title: {
+    display: 'none',
+    [theme.breakpoints.up('sm')]: {
+      display: 'block',
+    },
+    marginLeft: theme.spacing(1),
+  },
+  toolbar:{
+    backgroundColor: '#353535',
+  },
+  tabs:{
+    [theme.breakpoints.up('sm')]: {
+      marginLeft: theme.spacing(8),
+      width: 'auto',
+    },
+    backgroundColor: '#353535',
+  },
+  tab:{
+    '&:hover': {
+      color : '#3C6E71',
+      textDecoration: "underline transparent"
+    }
+  },
+
+}));
+
+export default function App() {
+const routes = ["/","/pages/Poi", "/pages/Trip"];
+const classes = useStyles();
+  return (
+    <div className="App">
+      <BrowserRouter>
+        <Route
+          path="/"
+          render={(history) => (
+            <AppBar position="fixed">
+              <Toolbar className={classes.toolbar}>
+                <IconButton edge="start" className={classes.menuButton} color="inherit" href="/">
+                    <img
+                        alt=""
+                        src={logo}
+                        width="40"
+                        height="40"
+                        className="d-inline-block align-top"
+                    />{' '}
+                <Typography variant="h6" className={classes.title}>
+                  Tourism Data
+                </Typography>
+                </IconButton>
+               
+                <Tabs
+                  value={
+                    history.location.pathname
+                      ? history.location.pathname
+                      : false
+                  }
+                  className={classes.tabs}
+                >
+                  <Tab
+                    value={routes[0]}
+                    label="Home"
+                    component={Link}
+                    to={routes[0]}
+                    className={classes.tab}
+                  />
+                  <Tab
+                    value={routes[1]}
+                    label="Point of Interest"
+                    component={Link}
+                    to={routes[1]}
+                    className={classes.tab}
+                  />
+                  <Tab
+                    value={routes[2]}
+                    label="Trip Planner"
+                    component={Link}
+                    to={routes[2]}
+                    className={classes.tab}
+                  />
+                </Tabs>
+                </Toolbar>
+            </AppBar>
+          )}
+        />
+
+        <Switch>
+          <Route path="/" component={Home} exact/>
+          <Route path="/pages/Poi" component={Poi} exact/>
+          <Route path="/pages/Trip" component={Trip} exact/>
+        </Switch>
+      </BrowserRouter>
+    </div>
+  );
+}
