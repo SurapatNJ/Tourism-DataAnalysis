@@ -1,8 +1,9 @@
 from django.urls import path, include
 from rest_framework import routers
-from app import views
+from .views import HeatmapViewSet
 
 router = routers.DefaultRouter()
+router.register(r'heatMap', HeatmapViewSet)
 
 urlpatterns = [
     path('', include(router.urls))
