@@ -1,6 +1,6 @@
 import React , {Component} from 'react';
 import '../App.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
+//import 'bootstrap/dist/css/bootstrap.min.css';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -35,10 +35,13 @@ export class MapContainer extends Component {
         integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
         crossorigin="anonymous"
       />
-   
-      <header className="App-section">
-            <h5>dashboard page</h5>
-      </header>
+      <header></header>
+
+      <section className="App-section">
+        <Container fluid style={{marginTop:50}}>
+            <h5 style={{marginTop:20}}>dashboard page</h5>
+        </Container>
+      </section>
    
     </div>
     );
