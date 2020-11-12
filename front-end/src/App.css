@@ -18,7 +18,7 @@
 }*/
 
 .App-header {
-  background-color: #C4F1BE;
+  background-color: #D9D9D9;
   min-height: 30px;
   display: flex;
   flex-direction: column;
@@ -31,8 +31,7 @@
 
 
 .App-section {
-  background:linear-gradient(transparent,rgba(32,30,80,0.5));
-  background-color: #C4F1BE;
+  background-color: #D9D9D9;
   background-size: cover;
   display: flex;
   align-items: left;
@@ -47,23 +46,7 @@
   color: #61dafb;
 }
 
-.color-nav{
-  background-color: #201E50;
-  font-family: csPrajad;
-}
 
-.nav-text{
-  color: #A2C3A4;
-  margin-left: 15px;
-}
-.nav-text:hover{
-  color: #869D96;
-}
-
-
-.nav-brand{
-  color: #C4F1BE;
-}
 
 /*
 @keyframes App-logo-spin {
