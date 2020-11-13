@@ -6,8 +6,8 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Jumbotron from 'react-bootstrap/Jumbotron';
-import options from './data';
-import 'react-bootstrap-typeahead/css/Typeahead.css';
+import placeOptions from './data';
+import cityOptions from './city';
 import {Typography,Paper,TextField,Select,InputLabel,MenuItem,FormControl,Fab,Card,CardContent,Divider} from "@material-ui/core";
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import RoomIcon from '@material-ui/icons/Room';
@@ -28,16 +28,35 @@ const mapStyles = {
 };
 
 const bounds = {
-  //example lat,lng
+  //example lat,lng for Rectangle
   north: 13.736,
   south: 13.736-0.01,
   west: 100.523,
   east: 100.523+0.01
 }
 
+
+export function CityName() {
+  const defaultProps = {
+    options: cityOptions,
+    getOptionLabel: (option) => option.cname_th +" ("+ option.cname_en +")",
+  }
+  return (
+    <div style={{ width: 300 ,height:20,marginTop:-10}}>
+      <Autocomplete
+        {...defaultProps}
+        id="cityName"
+        autoComplete
+        includeInputInList
+        renderInput={(params) => <TextField  {...params} label="ชื่อจังหวัด" style={{marginLeft:10}}/>}
+      />
+    </div>
+  );
+}
+
 export function PlaceName() {
   const defaultProps = {
-    options: options,
+    options: placeOptions,
     getOptionLabel: (option) => option.pname,
   }
   return (
@@ -138,7 +157,7 @@ export function EndTime() {
   };
   return (
     <div>
-      <FormControl>
+      <FormControl style={{marginLeft:10}}>
         <InputLabel id="endTime">เวลาสิ้นสุด</InputLabel>
         <Select
           labelId="selectEndTime"
@@ -200,8 +219,18 @@ export class MapContainer extends Component {
       <section className="App-section">
 
       <Container fluid style={{marginTop:60}} noGutters={true}>
-        <Paper elevation={5} style={{width:1200,height:130,marginTop:-15,marginLeft:140}}> 
+        <Paper elevation={5} style={{width:1200,height:180,marginTop:-15,marginLeft:140}}> 
         <Row style={{marginTop:20,marginLeft:40}} noGutters={true}>
+        <Col md="auto">
+            <InputGroup style={{marginTop:15}}>
+                <InputGroup.Prepend>
+                  <InputGroup.Text style={{backgroundColor:"#284B63",color:"#FFFFFF",borderRadius:5}}>City</InputGroup.Text>
+                </InputGroup.Prepend>
+                <CityName/>
+            </InputGroup>
+          </Col>
+        </Row>
+        <Row style={{marginLeft:40}} noGutters={true}>
           <Col md="auto">
             <InputGroup style={{marginTop:15}}>
                 <InputGroup.Prepend>
@@ -214,17 +243,15 @@ export class MapContainer extends Component {
         <Row style={{marginTop:-5,marginLeft:40}}>
             <InputGroup style={{width:1000,marginTop:15}}>
                 <InputGroup.Prepend>
-                  <InputGroup.Text style={{backgroundColor:"#284B63",color:"#FFFFFF",marginTop:10,marginRight:10,height:40,borderRadius:5}}>Date</InputGroup.Text>
+                  <InputGroup.Text style={{backgroundColor:"#284B63",color:"#FFFFFF",marginTop:10,marginRight:10,height:40,borderRadius:5}}>From</InputGroup.Text>
                 </InputGroup.Prepend>
                   <DateStart/>
-                  <Typography style={{marginLeft:20,marginTop:20,marginRight:20}}>To</Typography>
-                  <DateEnd/>
+                  <StartTime/>
                 <InputGroup.Prepend>
-                  <InputGroup.Text style={{backgroundColor:"#284B63",color:"#FFFFFF",marginTop:10,marginLeft:50,height:40,borderRadius:5}}>Time</InputGroup.Text>
+                  <InputGroup.Text style={{backgroundColor:"#284B63",color:"#FFFFFF",marginTop:10,marginLeft:50,marginRight:10,height:40,borderRadius:5}}>To</InputGroup.Text>
                 </InputGroup.Prepend>
-                <StartTime/>
-                <Typography style={{marginLeft:20,marginTop:20,marginRight:20}}>To</Typography>
-                <EndTime/>
+                  <DateEnd/>
+                  <EndTime/>
             </InputGroup>
                 <InputGroup.Append style={{marginTop:-12}}>
                   {/*Submit Button */}
