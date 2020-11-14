@@ -34,7 +34,7 @@ class HeatmapViewSet(viewsets.ModelViewSet):
         datetime_start = searchData['datetime_start']
         datetime_end = searchData['datetime_end']
 
-        if lat_en < lat_ws and lng_en < lng_ws:
+        if lat_en > lat_ws and lng_en > lng_ws:
 
             pd.set_option('display.max_columns', None)
 
@@ -61,7 +61,7 @@ class HeatmapViewSet(viewsets.ModelViewSet):
             print("Reading Finish!!! ")
             
             _vdf = pd.concat(df_, axis=0, ignore_index=True)
-            vdf = _vdf[_vdf.lat > lat_en][_vdf.lon > lng_en][_vdf.lat < lat_ws][_vdf.lon < lng_ws].copy()
+            vdf = _vdf[_vdf.lat > lat_ws][_vdf.lon > lng_ws][_vdf.lat < lat_en][_vdf.lon < lng_en].copy()
             del  _vdf
             yourdata = [{"lat": row['lat'], "lng": row['lon']} for index, row in vdf.iterrows()]
 
@@ -69,7 +69,7 @@ class HeatmapViewSet(viewsets.ModelViewSet):
             #results = HeatmapSerializer(yourdata, many=True).data
             return Response(yourdata)
         else:
-            return Response("Error!!! en >= ws")
+            return Response("Error!!! en <= ws")
 
 class GridViewSet(viewsets.ModelViewSet):
     queryset = gridMap.objects.all()
