@@ -6,26 +6,44 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Jumbotron from 'react-bootstrap/Jumbotron';
-import placeOptions from './data';
-import cityOptions from './city';
+import placeOptions from './PlaceData';
+import cityOptions from './CityData';
 import {Typography,Paper,TextField,Select,InputLabel,MenuItem,FormControl,Fab,Card,CardContent,Divider} from "@material-ui/core";
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import RoomIcon from '@material-ui/icons/Room';
 import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
 import LoyaltyIcon from '@material-ui/icons/Loyalty';
+import axios from "axios";
 
 //Google Map
-import { Map, GoogleApiWrapper } from 'google-maps-react';
-import { Rectangle } from "google-maps-react";
+import { Map, GoogleApiWrapper,Rectangle,HeatMap} from 'google-maps-react';
 
 
 
 const mapStyles = {
   width: '800px',
   height: '500px',
-  marginTop: '37px',
+  marginTop: '40px',
   marginLeft: '95px'
 };
+
+
+const gradient = [
+  "rgba(0, 255, 255, 0)",
+  "rgba(0, 255, 255, 1)",
+  "rgba(0, 191, 255, 1)",
+  "rgba(0, 127, 255, 1)",
+  "rgba(0, 63, 255, 1)",
+  "rgba(0, 0, 255, 1)",
+  "rgba(0, 0, 223, 1)",
+  "rgba(0, 0, 191, 1)",
+  "rgba(0, 0, 159, 1)",
+  "rgba(0, 0, 127, 1)",
+  "rgba(63, 0, 91, 1)",
+  "rgba(127, 0, 63, 1)",
+  "rgba(191, 0, 31, 1)",
+  "rgba(255, 0, 0, 1)"
+];
 
 const bounds = {
   //example lat,lng for Rectangle
@@ -35,20 +53,19 @@ const bounds = {
   east: 100.523+0.01
 }
 
-
 export function CityName() {
   const defaultProps = {
     options: cityOptions,
     getOptionLabel: (option) => option.cname_th +" ("+ option.cname_en +")",
   }
   return (
-    <div style={{ width: 300 ,height:20,marginTop:-10}}>
+    <div style={{ width: 400 ,height:20,marginTop:-10}}>
       <Autocomplete
         {...defaultProps}
         id="cityName"
         autoComplete
         includeInputInList
-        renderInput={(params) => <TextField  {...params} label="ชื่อจังหวัด" style={{marginLeft:10}}/>}
+        renderInput={(params) => <TextField {...params} label="ชื่อจังหวัด" style={{marginLeft:10}}/>}
       />
     </div>
   );
@@ -198,13 +215,55 @@ export function EndTime() {
 
 
 
-
-
-
 {/*     ////////       main     ///////    */ }
-export class MapContainer extends Component {
-  render() {
-    return (
+export class MapContainer extends Component  {
+
+  handleMapMount(mapProps, map) {
+    this.map = map;
+    //setTimeout(() =>{console.log(this.map.getBounds());},10)
+    this.bounds = this.map.getBounds();
+    console.log(this.bounds,this.bounds.getNorthEast().lat(),this.bounds.getNorthEast().lng(),this.bounds.getSouthWest().lat(),this.bounds.getSouthWest().lng())
+    axios
+      .post("http://localhost:8000/api/heatMap/",{
+       lat_en:this.bounds.getNorthEast().lat(),
+       lng_en:this.bounds.getNorthEast().lng(),
+       lat_ws:this.bounds.getSouthWest().lat(),
+       lng_ws:this.bounds.getSouthWest().lng(),
+       datetime_start: null,
+       datetime_end: null
+    },{
+        headers: {
+          'Content-Type': 'application/json'
+    }})
+      .then(function (response) {
+      console.log(response);
+    })
+      .catch(function (error) {
+      console.log(error);
+    });
+}
+  state = {
+    isHeatVisible : true
+  };
+  toggleHeatmap = () => {
+    this.setState({isHeatVisible: !this.state.isHeatVisible});
+  }
+
+
+  render(){
+    
+    this.handleMapMount = this.handleMapMount.bind(this);
+    {this.state.isHeatVisible ? HeatMap : null}
+
+    let heat = <HeatMap
+            //gradient={gradient}
+            positions={this.props.positions}
+            opacity={1}
+            radius={10}
+            maxIntensity = {5}
+          />
+    
+    return(
       <div className="Poi">
       <link
         rel="stylesheet"
@@ -212,7 +271,7 @@ export class MapContainer extends Component {
         integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
         crossorigin="anonymous"
       />
-   
+
       <header className="App-header">
       </header>
 
@@ -267,12 +326,13 @@ export class MapContainer extends Component {
                 </InputGroup.Append>
         </Row>
         </Paper>
-        <Row>
+        
+        <Row style={{marginTop:20}}>
           {/*   /////   Map detail //////   */}
           <Col md="auto">
             <Map
             google={this.props.google}
-            zoom={14}
+            zoom={9.5}
             style={mapStyles}
             disableDefaultUI ={true}
             scrollwheel={false}
@@ -281,22 +341,24 @@ export class MapContainer extends Component {
             zoomControl={false}
             initialCenter={
               {
-                lat:  13.736717,
-                lng:  100.523186
+                lat:  13.13,
+                lng:  101.08
               }
             }
-            >
+          >                
+            <Paper style={{width:875,height:575,marginLeft:57,marginTop:20}} elevation={5}/>
+                <Fab
+                        variant="extended"
+                        size="large"
+                        color="secondary"
+                        aria-label="Add"
+                        style={{width:800,height:40,marginLeft:95,marginTop:-97}}
+                        onClick={this.toggleHeatmap}
+                      >
+                          Open Heat Map
+                </Fab>
 
-            <Paper style={{width:870,height:570,marginLeft:57,marginTop:20}} elevation={5}/>
-            <Fab
-                    variant="extended"
-                    size="large"
-                    color="secondary"
-                    aria-label="Add"
-                    style={{width:800,height:40,marginLeft:95,marginTop:-92}}
-                   >
-                      Open Heat Map
-            </Fab>
+                {this.state.isHeatVisible ? heat: null}
             </Map>
           </Col>
 
@@ -349,7 +411,10 @@ export class MapContainer extends Component {
   }
 }
 
+
 export default GoogleApiWrapper({
-  apiKey: 'AIzaSyDf8sqiZUNBWHSQkw3Tqpt5R6LIb4kLdbc'
+  apiKey: 'AIzaSyDf8sqiZUNBWHSQkw3Tqpt5R6LIb4kLdbc',
+  language:'th',
+  libraries: ["visualization"]
 })(MapContainer);
 
