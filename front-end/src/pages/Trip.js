@@ -5,121 +5,317 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { Map, GoogleApiWrapper } from 'google-maps-react';
-import Button from 'react-bootstrap/Button';
-import Card from 'react-bootstrap/Card';
-import CardDeck from 'react-bootstrap/CardDeck';
-import InputGroup from 'react-bootstrap/InputGroup';
+import options from '../data/PlaceData';
 import Jumbotron from 'react-bootstrap/Jumbotron';
-import ListGroup from 'react-bootstrap/ListGroup';
-import { Typeahead } from 'react-bootstrap-typeahead';
-import options from './PlaceData';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
-import ProgressBar from 'react-bootstrap/ProgressBar';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 import { Scrollbars } from 'react-custom-scrollbars';
+import {Typography,Paper,Tab,Tabs,Box,TextField,Select,InputLabel,MenuItem,FormControl,Fab,Card,CardContent,Divider} from "@material-ui/core";
+import PropTypes from 'prop-types';
+import placeOptions from '../data/PlaceData';
+import cityOptions from '../data/CityData';
+import modeOptions from '../data/modeOptions';
+
+
 
 const mapStyles = {
-  width: '825px',
+  width: '800px',
   height: '500px',
-  marginTop: '20px',
-  marginLeft: '80px'
+  marginTop: '55px',
+  marginLeft: '93px'
 };
 
 
-const PlaceSequence = () => {
-  const ref = useRef();
+export function CityName() {
+  const defaultProps = {
+    options: cityOptions,
+    getOptionLabel: (option) => option.cname_th +" ("+ option.cname_en +")",
+  }
   return (
-    <Fragment>
-      <Typeahead
-        clearButton
-        id="placeSequence"
-        labelKey="pname"
-        multiple
-        options={options}
-        placeholder="ชื่อสถานที่ (จำนวน5สถานที่)"
-        ref={ref}
-        style={{width:680}}
+    <div style={{ width: 320 ,height:20}}>
+      <Autocomplete
+        {...defaultProps}
+        id="cityName"
+        autoComplete
+        includeInputInList
+        renderInput={(params) => <TextField {...params} label="ชื่อจังหวัด" style={{marginLeft:10}}/>}
       />
-    </Fragment>
+    </div>
   );
+}
+
+export function PlaceName() {
+  const defaultProps = {
+    options: placeOptions,
+    getOptionLabel: (option) => option.pname,
+  }
+  return (
+    <div style={{ width: 320 ,height:30}}>
+      <Autocomplete
+        {...defaultProps}
+        multiple
+        id="placeName"
+        limitTags={1}
+        autoComplete
+        renderInput={(params) => <TextField  {...params} label="ชื่อสถานที่ท่องเที่ยว" style={{marginLeft:10}}/>}
+      />
+    </div>
+  );
+}
+
+
+export function ModeName() {
+  const defaultProps = {
+    options: modeOptions,
+    getOptionLabel: (option) => option.mname,
+  }
+  return (
+    <div style={{ width: 320 ,height:20}}>
+      <Autocomplete
+        {...defaultProps}
+        id="modeName"
+        autoComplete
+        includeInputInList
+        renderInput={(params) => <TextField {...params} label="โหมดสถานที่" style={{marginLeft:10}}/>}
+      />
+    </div>
+  );
+}
+
+
+export function DateStart() {
+  return (
+    <form noValidate>
+      <TextField
+        id="dateStart"
+        label="วันที่เริ่มต้น"
+        type="date"
+        defaultValue="2020-01-01"
+        InputLabelProps={{
+          shrink: true,
+        }}
+      />
+    </form>
+  );
+}
+export function DateEnd() {
+  return (
+    <form noValidate>
+      <TextField
+        id="dateEnd"
+        label="วันที่สิ้นสุด"
+        type="date"
+        defaultValue="2020-01-01"
+        InputLabelProps={{
+          shrink: true,
+        }}
+      />
+    </form>
+  );
+}
+
+
+export function StartTime() {
+  const [startTime, setStartTime] = React.useState('');
+  const handleChange = (event) => {
+    setStartTime(event.target.value);
+  };
+  return (
+    <div>
+      <FormControl style={{marginLeft:10}}>
+        <InputLabel id="startTime">เวลาเริ่มต้น</InputLabel>
+        <Select
+          labelId="selectStartTime"
+          id="selectStartTime"
+          value={startTime}
+          onChange={handleChange}
+          style={{width:120}}
+        >
+          <MenuItem value={1}>00:00</MenuItem>
+          <MenuItem value={2}>01:00</MenuItem>
+          <MenuItem value={3}>02:00</MenuItem>
+          <MenuItem value={4}>03:00</MenuItem>
+          <MenuItem value={5}>04:00</MenuItem>
+          <MenuItem value={6}>05:00</MenuItem>
+          <MenuItem value={7}>06:00</MenuItem>
+          <MenuItem value={8}>07:00</MenuItem>
+          <MenuItem value={9}>08:00</MenuItem>
+          <MenuItem value={10}>09:00</MenuItem>
+          <MenuItem value={11}>10:00</MenuItem>
+          <MenuItem value={12}>11:00</MenuItem>
+          <MenuItem value={13}>12:00</MenuItem>
+          <MenuItem value={14}>13:00</MenuItem>
+          <MenuItem value={15}>14:00</MenuItem>
+          <MenuItem value={16}>15:00</MenuItem>
+          <MenuItem value={17}>16:00</MenuItem>
+          <MenuItem value={18}>17:00</MenuItem>
+          <MenuItem value={19}>18:00</MenuItem>
+          <MenuItem value={20}>19:00</MenuItem>
+          <MenuItem value={21}>20:00</MenuItem>
+          <MenuItem value={22}>21:00</MenuItem>
+          <MenuItem value={23}>22:00</MenuItem>
+          <MenuItem value={24}>23:00</MenuItem>
+        </Select>
+      </FormControl>
+    </div>
+  );
+}
+
+export function EndTime() {
+  const [endTime, setEndTime] = React.useState('');
+  const handleChange = (event) => {
+    setEndTime(event.target.value);
+  };
+  return (
+    <div>
+      <FormControl style={{marginLeft:10}}>
+        <InputLabel id="endTime">เวลาสิ้นสุด</InputLabel>
+        <Select
+          labelId="selectEndTime"
+          id="selectEndTime"
+          value={endTime}
+          onChange={handleChange}
+          style={{width:120}}
+        >
+          <MenuItem value={1}>00:00</MenuItem>
+          <MenuItem value={2}>01:00</MenuItem>
+          <MenuItem value={3}>02:00</MenuItem>
+          <MenuItem value={4}>03:00</MenuItem>
+          <MenuItem value={5}>04:00</MenuItem>
+          <MenuItem value={6}>05:00</MenuItem>
+          <MenuItem value={7}>06:00</MenuItem>
+          <MenuItem value={8}>07:00</MenuItem>
+          <MenuItem value={9}>08:00</MenuItem>
+          <MenuItem value={10}>09:00</MenuItem>
+          <MenuItem value={11}>10:00</MenuItem>
+          <MenuItem value={12}>11:00</MenuItem>
+          <MenuItem value={13}>12:00</MenuItem>
+          <MenuItem value={14}>13:00</MenuItem>
+          <MenuItem value={15}>14:00</MenuItem>
+          <MenuItem value={16}>15:00</MenuItem>
+          <MenuItem value={17}>16:00</MenuItem>
+          <MenuItem value={18}>17:00</MenuItem>
+          <MenuItem value={19}>18:00</MenuItem>
+          <MenuItem value={20}>19:00</MenuItem>
+          <MenuItem value={21}>20:00</MenuItem>
+          <MenuItem value={22}>21:00</MenuItem>
+          <MenuItem value={23}>22:00</MenuItem>
+          <MenuItem value={24}>23:00</MenuItem>
+        </Select>
+      </FormControl>
+    </div>
+  );
+}
+
+
+function TabPanel(props) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`full-width-tabpanel-${index}`}
+      aria-labelledby={`full-width-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box p={3}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
+  );
+}
+
+TabPanel.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.any.isRequired,
+  value: PropTypes.any.isRequired,
 };
 
-
-class SelectDay extends Component{
-  constructor(){
-      super();
-      this.state = {
-          day:null,
-      }
-      this.handleInputChange = this.handleInputChange.bind(this);
-  }
-  handleInputChange(event) {
-      this.setState({
-          day: event.target.value
-      });
-  }
-  render(){
-      return(
-              <select className="form-control" onChange={this.handleInputChange}>
-                <option selected>Select Day</option>
-                <option value="1">Monday</option>
-                <option value="2">Tuesday</option>
-                <option value="3">Wednesday</option>
-                <option value="4">Thursday</option>
-                <option value="5">Friday</option>
-                <option value="6">Saturday</option>
-                <option value="7">Sunday</option>
-                </select>
-      )  
-  }
+function a11yProps(index) {
+  return {
+    id: `full-width-tab-${index}`,
+    'aria-controls': `full-width-tabpanel-${index}`,
+  };
+}
+function ChooseTabs() {
+  const [value, setValue] = React.useState(0);
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+  return (
+    <Paper elevation={0} style={{width:386,marginTop:10,marginLeft:-16}}>
+      <Tabs
+        value={value}
+        indicatorColor="secondary"
+        style={{backgroundColor:'#3C6E71'}}
+        variant="fullWidth"
+        onChange={handleChange}
+      >
+        <Tab style={{fontFamily:"csPrajad" ,fontSize:18,color:'white'}} label="สถานที่ท่องเที่ยว" {...a11yProps(0)}/>
+        <Tab style={{fontFamily:"csPrajad" ,fontSize:18,color:'white'}} label="โรงแรม/ที่พัก" {...a11yProps(1)}/>
+      </Tabs>
+        <Scrollbars style={{ width: 382, height: 300,marginTop:5}}>
+          <TabPanel value={value} index={0} >
+              <Typography style={{fontFamily:"csPrajad",fontSize:20}}>
+                ชื่อจังหวัด : 
+              </Typography>
+              <CityName/>
+              <br/>
+              <Divider style={{marginTop:20}}/>
+              <Typography style={{fontFamily:"csPrajad",fontSize:20}}>
+              <br/>
+                ชื่อสถานที่ : 
+              </Typography>
+              <PlaceName/>
+              <br/>
+              <Divider style={{marginTop:20}}/>
+              <Typography style={{fontFamily:"csPrajad",fontSize:20}}>
+              <br/>
+                หมวดสถานที่ : 
+              </Typography>
+              <ModeName/>
+              <br/>
+              <Divider style={{marginTop:20}}/>
+              <Typography style={{fontFamily:"csPrajad",fontSize:20}}>
+              <br/>
+                วันที่เริ่มต้น : 
+              </Typography>
+              <Row style={{marginLeft:10}}><DateStart/><StartTime/></Row>
+              <Divider style={{marginTop:20}}/>
+              <Typography style={{fontFamily:"csPrajad",fontSize:20}}>
+              <br/>
+                วันที่สิ้นสุด : 
+              </Typography>
+              <Row style={{marginLeft:10}}><DateEnd/><EndTime/></Row>              
+          </TabPanel>
+          <TabPanel value={value} index={1} >
+              <Typography style={{fontFamily:"csPrajad",fontSize:20}}>
+              <br/>
+                โรงแรม/ที่พัก : 
+                <Fab
+                    variant="extended"
+                    size="large"
+                    color="secondary"
+                    aria-label="Add"
+                    style={{width:150,height:50,marginLeft:20,fontFamily:'csPrajad',fontSize:16}}
+                   >
+                      เลือกโรงแรม/ที่พัก
+              </Fab>
+              </Typography>
+              
+          </TabPanel>
+        </Scrollbars>
+    </Paper>
+    
+  );
 }
 
-class SelectTime extends Component{
-  constructor(){
-      super();
-      this.state = {
-          time:null,
-      }
-      this.handleInputChange = this.handleInputChange.bind(this);
-  }
-  handleInputChange(event) {
-      this.setState({
-          time: event.target.value
-      });
-  }
-  render(){
-      return(
-              <select className="form-control" onChange={this.handleInputChange}>
-                <option selected>Select Time</option>
-                <option value="1">00:00-01:00</option>
-                <option value="2">01:00-02:00</option>
-                <option value="3">02:00-03:00</option>
-                <option value="4">03:00-04:00</option>
-                <option value="5">04:00-05:00</option>
-                <option value="6">05:00-06:00</option>
-                <option value="7">06:00-07:00</option>
-                <option value="8">07:00-08:00</option>
-                <option value="9">08:00-09:00</option>
-                <option value="10">09:00-10:00</option>
-                <option value="11">10:00-11:00</option>
-                <option value="12">11:00-12:00</option>
-                <option value="13">12:00-13:00</option>
-                <option value="14">13:00-14:00</option>
-                <option value="15">14:00-15:00</option>
-                <option value="16">15:00-16:00</option>
-                <option value="17">16:00-17:00</option>
-                <option value="18">17:00-18:00</option>
-                <option value="19">18:00-19:00</option>
-                <option value="20">19:00-20:00</option>
-                <option value="21">20:00-21:00</option>
-                <option value="22">21:00-22:00</option>
-                <option value="23">22:00-23:00</option>
-                <option value="24">23:00-00:00</option>
-                </select>
-      )  
-  }
-}
 
 
+{/*     ////////       main     ///////    */ }
 export class MapContainer extends Component {
   render() {
     return (
@@ -136,76 +332,59 @@ export class MapContainer extends Component {
 
       <section className="App-section">
       <Container fluid style={{marginTop:50}}>
-        <Row style={{marginTop:20,marginLeft:95}} noGutters={true}>
-          <Col md="auto">
-            <InputGroup>
-                <InputGroup.Prepend>
-                  <InputGroup.Text style={{backgroundColor:"#525B76",color:"#FFFFFF"}}>Point of Interest</InputGroup.Text>
-                </InputGroup.Prepend>
-                 <PlaceSequence/>
-            </InputGroup>
-          </Col>
-          <Col md="auto">
-            <InputGroup style={{width:400}}>
-                <InputGroup.Prepend>
-                  <InputGroup.Text style={{backgroundColor:"#525B76",color:"#FFFFFF"}}>Day</InputGroup.Text>
-                </InputGroup.Prepend>
-                <SelectDay/>
-                {/* -------------------------------------- */ }
-                <InputGroup.Prepend>
-                  <InputGroup.Text style={{backgroundColor:"#525B76",color:"#FFFFFF"}}>Time</InputGroup.Text>
-                </InputGroup.Prepend>
-                <SelectTime/>
-            </InputGroup>
-          </Col>
-          <Col>
-                <InputGroup.Append>
-                  <Button variant="secondary">Submit</Button>{' '}
-                </InputGroup.Append>
-          </Col>
-      
+        <Row style={{marginTop:5,marginLeft:95}} noGutters={true}>
+         
         </Row>
         <Row>
           <Col md="auto">
             <Map
-            google={this.props.google}
-            zoom={14}
-            style={mapStyles}
-            disableDefaultUI ={true}
-            scrollwheel={false}
-            disableDoubleClickZoom = {true}
-            draggable={false}
-            initialCenter={
-              {
-                lat:  13.736717,
-                lng:  100.523186
-              }
+          google={this.props.google}
+          zoom={9.5}
+          style={mapStyles}
+          disableDefaultUI ={true}
+          scrollwheel={false}
+          disableDoubleClickZoom = {true}
+          draggable={false}
+          zoomControl={false}
+          onReady={this.handleMapReady}
+          onBounds_changed={this.handleMapMount}
+          initialCenter={
+            {
+              lat:  13.12,
+              lng:  101.20
             }
-            />
+          }
+            >
+              <Paper style={{width:875,height:575,marginLeft:57,marginTop:20}} elevation={5}/>
+            </Map>
 
           </Col>
-          <Col style={{marginLeft:780}} md="auto">
-            <Jumbotron style={{backgroundSize:'cover' , backgroundColor:'#525B76', marginTop:20, marginLeft:150 , width:450}}>
-                <CardDeck style={{ width: '450px',marginLeft:-32,marginTop:-50}}> 
-                  <Card border="primary">
-                    <Card.Header style={{textAlign:"center",fontSize:20}}>ทริปยอดนิยม</Card.Header>
-                    <Scrollbars style={{ width: 400, height: 400 }}>
-                    <Card.Body>
-                      <ListGroup variant="flush" style={{fontSize:14}}>
-                        <ListGroup.Item>จุดเริ่มต้น: <br></br>จุดปลายทาง: <br></br>เวลารวม: <br></br>ระยะทางรวม: <br></br>คะแนนความนิยม: <ProgressBar variant="warning"animated now={45} /> <br></br><Card.Link href="#">เลือกเส้นทาง</Card.Link></ListGroup.Item>
-                        <ListGroup.Item>จุดเริ่มต้น: <br></br>จุดปลายทาง: <br></br>เวลารวม: <br></br>ระยะทางรวม: <br></br>คะแนนความนิยม: <ProgressBar variant="warning"animated now={45} /> <br></br><Card.Link href="#">เลือกเส้นทาง</Card.Link></ListGroup.Item>
-                        <ListGroup.Item>จุดเริ่มต้น: <br></br>จุดปลายทาง: <br></br>เวลารวม: <br></br>ระยะทางรวม: <br></br>คะแนนความนิยม: <ProgressBar variant="warning"animated now={45} /> <br></br><Card.Link href="#">เลือกเส้นทาง</Card.Link></ListGroup.Item>
-                        <ListGroup.Item>จุดเริ่มต้น: <br></br>จุดปลายทาง: <br></br>เวลารวม: <br></br>ระยะทางรวม: <br></br>คะแนนความนิยม: <ProgressBar variant="warning"animated now={45} /> <br></br><Card.Link href="#">เลือกเส้นทาง</Card.Link></ListGroup.Item>
-                        <ListGroup.Item>จุดเริ่มต้น: <br></br>จุดปลายทาง: <br></br>เวลารวม: <br></br>ระยะทางรวม: <br></br>คะแนนความนิยม: <ProgressBar variant="warning"animated now={45} /> <br></br><Card.Link href="#">เลือกเส้นทาง</Card.Link></ListGroup.Item>
-                      </ListGroup>
-                    </Card.Body>
-                    </Scrollbars>
-                    <Card.Footer>
-                      <small className="text-muted"></small>
-                    </Card.Footer>
-                  </Card>
-                </CardDeck>
-                </Jumbotron>
+          <Col style={{marginLeft:800}} md="auto">
+            <Jumbotron style={{backgroundSize:'cover' , backgroundColor:'#3C6E71', marginTop:20, marginLeft:150 , width:450}}>
+            <Card style={{marginTop:-20}}>
+                <CardContent >
+                  <Typography style={{fontFamily:"csPrajad" ,fontSize:24}}>
+                    แผนการท่องเที่ยว
+                  </Typography>
+                  <Typography color="textSecondary" style={{fontFamily:"csPrajad",fontSize:16}}>
+                    Trip Planner
+                  </Typography>
+                  <ChooseTabs/>
+                  <br />
+                  <Divider/>
+                </CardContent>
+              </Card>
+              <Fab
+                  variant="extended"
+                  size="large"
+                  color="secondary"
+                  aria-label="Add"
+                  style={{width:100,height:50,marginTop:10,marginLeft:280,marginBottom:-28}}
+              >
+                  Submit
+              </Fab>
+            </Jumbotron>
+              
           </Col>
         </Row>
         </Container>
@@ -216,8 +395,7 @@ export class MapContainer extends Component {
 }
 
 export default GoogleApiWrapper({
-  apiKey: 'AIzaSyDf8sqiZUNBWHSQkw3Tqpt5R6LIb4kLdbc'
+  apiKey: 'AIzaSyDf8sqiZUNBWHSQkw3Tqpt5R6LIb4kLdbc',
+  language:'th',
+  libraries: ["visualization"]
 })(MapContainer);
-
-
- 
