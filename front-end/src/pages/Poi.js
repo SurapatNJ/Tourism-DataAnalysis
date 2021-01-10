@@ -6,17 +6,18 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Jumbotron from 'react-bootstrap/Jumbotron';
-import placeOptions from './PlaceData';
-import cityOptions from './CityData';
+import placeOptions from '../data/PlaceData';
+import cityOptions from '../data/CityData';
+import poiOptions from '../data/PoiData';
 import {Typography,Paper,TextField,Select,InputLabel,MenuItem,FormControl,Fab,Card,CardContent,Divider} from "@material-ui/core";
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import RoomIcon from '@material-ui/icons/Room';
 import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
 import LoyaltyIcon from '@material-ui/icons/Loyalty';
-import axios from "axios";
+//import axios from "axios";
 
 //Google Map
-import { Map, GoogleApiWrapper,Rectangle,HeatMap} from 'google-maps-react';
+import { Map, GoogleApiWrapper,Rectangle,HeatMap,Marker} from 'google-maps-react';
 
 
 
@@ -24,34 +25,10 @@ const mapStyles = {
   width: '800px',
   height: '500px',
   marginTop: '40px',
-  marginLeft: '95px'
+  marginLeft: '93px'
 };
 
 
-const gradient = [
-  "rgba(0, 255, 255, 0)",
-  "rgba(0, 255, 255, 1)",
-  "rgba(0, 191, 255, 1)",
-  "rgba(0, 127, 255, 1)",
-  "rgba(0, 63, 255, 1)",
-  "rgba(0, 0, 255, 1)",
-  "rgba(0, 0, 223, 1)",
-  "rgba(0, 0, 191, 1)",
-  "rgba(0, 0, 159, 1)",
-  "rgba(0, 0, 127, 1)",
-  "rgba(63, 0, 91, 1)",
-  "rgba(127, 0, 63, 1)",
-  "rgba(191, 0, 31, 1)",
-  "rgba(255, 0, 0, 1)"
-];
-
-const bounds = {
-  //example lat,lng for Rectangle
-  north: 13.736,
-  south: 13.736-0.01,
-  west: 100.523,
-  east: 100.523+0.01
-}
 
 export function CityName() {
   const defaultProps = {
@@ -214,55 +191,26 @@ export function EndTime() {
 }
 
 
+export function PoiRec() {
+  /*const defaultProps = {
+    options: poiOptions,
+    getOptionLabel: (option) => option.lat+" "+option.lon,
+  }
+  return (
+    <div>
+
+    </div>
+  );*/
+
+}
+
+
+
 
 {/*     ////////       main     ///////    */ }
-export class MapContainer extends Component  {
 
-  handleMapMount(mapProps, map) {
-    this.map = map;
-    //setTimeout(() =>{console.log(this.map.getBounds());},10)
-    this.bounds = this.map.getBounds();
-    console.log(this.bounds,this.bounds.getNorthEast().lat(),this.bounds.getNorthEast().lng(),this.bounds.getSouthWest().lat(),this.bounds.getSouthWest().lng())
-    axios
-      .post("http://localhost:8000/api/heatMap/",{
-       lat_en:this.bounds.getNorthEast().lat(),
-       lng_en:this.bounds.getNorthEast().lng(),
-       lat_ws:this.bounds.getSouthWest().lat(),
-       lng_ws:this.bounds.getSouthWest().lng(),
-       datetime_start: null,
-       datetime_end: null
-    },{
-        headers: {
-          'Content-Type': 'application/json'
-    }})
-      .then(function (response) {
-      console.log(response);
-    })
-      .catch(function (error) {
-      console.log(error);
-    });
-}
-  state = {
-    isHeatVisible : true
-  };
-  toggleHeatmap = () => {
-    this.setState({isHeatVisible: !this.state.isHeatVisible});
-  }
-
-
+export class MapContainer extends React.Component  {
   render(){
-    
-    this.handleMapMount = this.handleMapMount.bind(this);
-    {this.state.isHeatVisible ? HeatMap : null}
-
-    let heat = <HeatMap
-            //gradient={gradient}
-            positions={this.props.positions}
-            opacity={1}
-            radius={10}
-            maxIntensity = {5}
-          />
-    
     return(
       <div className="Poi">
       <link
@@ -312,8 +260,8 @@ export class MapContainer extends Component  {
                   <DateEnd/>
                   <EndTime/>
             </InputGroup>
-                <InputGroup.Append style={{marginTop:-12}}>
-                  {/*Submit Button */}
+                <InputGroup.Append style={{marginTop:-40,marginLeft:15}}>
+                  {/*Submit Button        */ }
                   <Fab
                     variant="extended"
                     size="large"
@@ -328,7 +276,9 @@ export class MapContainer extends Component  {
         </Paper>
         
         <Row style={{marginTop:20}}>
+
           {/*   /////   Map detail //////   */}
+
           <Col md="auto">
             <Map
             google={this.props.google}
@@ -339,13 +289,20 @@ export class MapContainer extends Component  {
             disableDoubleClickZoom = {true}
             draggable={false}
             zoomControl={false}
+            onReady={this.handleMapReady}
+            onBounds_changed={this.handleMapMount}
             initialCenter={
               {
-                lat:  13.13,
-                lng:  101.08
+                lat:  13.12,
+                lng:  101.20
               }
             }
-          >                
+          >     
+          {placeOptions.map(placeOptions=>(
+            <Marker key={placeOptions.pname} position={{lat:placeOptions.lat,lng:placeOptions.lon}} />
+          ))}
+     
+        
             <Paper style={{width:875,height:575,marginLeft:57,marginTop:20}} elevation={5}/>
                 <Fab
                         variant="extended"
@@ -358,8 +315,8 @@ export class MapContainer extends Component  {
                           Open Heat Map
                 </Fab>
 
-                {this.state.isHeatVisible ? heat: null}
             </Map>
+
           </Col>
 
           {/*      /////     card     ///////    */}
@@ -382,7 +339,6 @@ export class MapContainer extends Component  {
                   </Typography>
                   <br />
                   <Divider/>
-                 
                   <Typography style={{fontFamily:"csPrajad",fontSize:20}}>
                     <br />
                     <RoomIcon/>
@@ -395,6 +351,8 @@ export class MapContainer extends Component  {
                     <LoyaltyIcon />
                     ความนิยม : 
                   </Typography>
+                  <br />
+                  <Divider/>
                 </CardContent>
               </Card>
             </Jumbotron>
